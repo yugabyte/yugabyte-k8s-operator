@@ -1,0 +1,358 @@
+# Copyright (c) YugaByte, Inc.
+
+{{- if .Values.image.pullSecretFile }}
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: {{ $.Files.Get .Values.image.pullSecretFile | b64enc }}
+kind: Secret
+metadata:
+  name: {{ .Values.image.pullSecret }}
+type: kubernetes.io/dockerconfigjson
+{{- end }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-yugaware-app-config
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  application.docker.conf: |
+    include classpath("application.common.conf")
+    play.crypto.secret=${APP_SECRET}
+    play.i18n.langs = [ "en" ]
+    pidfile.path = "/dev/null"
+    play.logger.includeConfigProperties=true
+    log.override.path = "/opt/yugabyte/yugaware/data/logs"
+
+    db {
+      default.dbname=${POSTGRES_DB}
+  {{ if and (not .Values.useYugabyteDB) .Values.postgres.external.host }}
+      default.host="{{ .Values.postgres.external.host }}"
+      default.port={{ .Values.postgres.external.port }}
+  {{ else if eq .Values.ip_version_support "v6_only" }}
+      default.host="[::1]"
+  {{ else }}
+      default.host="127.0.0.1"
+  {{ end }}
+  {{- if .Values.useYugabyteDB }}
+      default.port={{ .Values.yugabytedb.config.ysqlPort | default "5433" }}
+  {{- end }}
+      default.url="jdbc:postgresql://"${db.default.host}":"${db.default.port}"/"${db.default.dbname}${db.default.params}
+      default.params="{{ .Values.jdbcParams }}"
+      default.username=${POSTGRES_USER}
+      default.password=${POSTGRES_PASSWORD}
+  {{ if .Values.yugaware.cloud.enabled }}
+      perf_advisor.driver="org.hsqldb.jdbc.JDBCDriver"
+      perf_advisor.url="jdbc:hsqldb:mem:perf-advisor"
+      perf_advisor.createDatabaseIfMissing=false
+      perf_advisor.username="sa"
+      perf_advisor.password="sa"
+      perf_advisor.migration.auto=false
+      perf_advisor.migration.disabled=true
+  {{ else }}
+      perf_advisor.url="jdbc:postgresql://"${db.default.host}":"${db.default.port}"/"${db.perf_advisor.dbname}${db.default.params}
+      perf_advisor.createDatabaseUrl="jdbc:postgresql://"${db.default.host}":"${db.default.port}"/"${db.default.dbname}${db.default.params}
+  {{ end }}
+    }
+
+    {{- if and (not .Values.useNginxProxy) (.Values.tls.enabled) }}
+    https.port = 9443
+    play.server.https.keyStore {
+      path = /opt/certs/server.pem
+      type = PEM
+    }
+    {{- end }}
+
+    yb {
+  {{- if .Values.yugaware.universe_boot_script }}
+      universe_boot_script = "/data/universe-boot-script.sh"
+  {{- end }}
+      cloud.enabled = {{ .Values.yugaware.cloud.enabled }}
+      cloud.requestIdHeader = "{{ .Values.yugaware.cloud.requestIdHeader }}"
+      devops.home = /opt/yugabyte/devops
+      metrics.host = "{{ eq .Values.ip_version_support "v6_only" | ternary "[::1]" "127.0.0.1" }}"
+      metrics.url = "http://"${yb.metrics.host}":9090/api/v1"
+      metrics.management.url = "http://"${yb.metrics.host}":9090/-"
+      storage.path = /opt/yugabyte/yugaware/data
+      docker.network = bridge
+      seedData = false
+      swamper.targetPath = /opt/yugabyte/prometheus/targets
+      swamper.rulesPath = /opt/yugabyte/prometheus/rules
+      security.enable_auth_for_proxy_metrics = {{ .Values.yugaware.enableProxyMetricsAuth }}
+      proxy_endpoint_timeout = {{ .Values.yugaware.proxyEndpointTimeoutMs }}
+      multiTenant = {{ .Values.yugaware.multiTenant }}
+      releases.path = "/opt/yugabyte/releases"
+      docker.release = "/opt/yugabyte/release"
+      # TODO(bogdan): need this extra level for installing from local...
+      thirdparty.packagePath = /opt/third-party
+      helm.packagePath = "{{ .Values.helm.packagePath }}"
+      helm.timeout_secs = {{ .Values.helm.timeout }}
+      health.check_interval_ms = 300000
+      health.status_interval_ms = 43200000
+      health.default_email = "{{ .Values.yugaware.health.email }}"
+      health.ses_email_username = "{{ .Values.yugaware.health.username }}"
+      health.ses_email_password = "{{ .Values.yugaware.health.password }}"
+      kubernetes.storageClass = "{{ .Values.yugaware.storageClass }}"
+      kubernetes.pullSecretName = "{{ .Values.image.pullSecret }}"
+      kubernetes.operator.enabled = "{{ .Values.yugaware.kubernetesOperatorEnabled }}"
+      kubernetes.operator.namespace = "{{ .Values.yugaware.kubernetesOperatorNamespace }}"
+      kubernetes.operator.crash_yba_on_operator_failure = "{{ .Values.yugaware.kubernetesOperatorCrashOnFailure }}"
+      url = "https://{{ .Values.tls.hostname }}"
+      # GKE MCS takes 7 to 10 minutes to setup DNS
+      wait_for_server_timeout = 15 minutes
+    {{- if .Values.tls.enabled }}
+      security.headers.hsts_enabled = true
+    {{- end }}
+      security.headers.custom_headers = {{ include "customHeaders" . }}
+    }
+
+    play.filters {
+      # CSRF config
+      csrf {
+        cookie {
+          # If non null, the CSRF token will be placed in a cookie with this name
+          name = "csrfCookie"
+          # Whether the cookie should be set to secure
+          secure = false
+          # Whether the cookie should have the HTTP only flag set
+          httpOnly = false
+        }
+        # Whether to bypass CSRF check if CORS check is satisfied
+        bypassCorsTrustedOrigins = false
+        header {
+          # The name of the header to accept CSRF tokens from.
+          name = "Csrf-Token"
+        }
+      }
+      # CORS config
+      cors {
+        pathPrefixes = ["/"]
+        allowedOrigins = {{ include "allowedCorsOrigins" . }}
+        # Server allows cookies/credentials to be sent with cross-origin requests
+        supportsCredentials=true
+        allowedHttpMethods = ["GET", "POST", "PUT", "OPTIONS", "DELETE"]
+        allowedHttpHeaders = ["Accept", "Origin", "Content-Type", "X-Auth-Token", "X-AUTH-YW-API-TOKEN", "{{ .Values.yugaware.cloud.requestIdHeader }}", ${play.filters.csrf.header.name}]
+      }
+    }
+
+    # string config entries from helm values additionalAppConf
+    {{- range $key, $value := .Values.additionalAppConf.stringConf }}
+    {{ $key }} = "{{ $value }}"
+    {{- end }}
+
+    # boolean/int config entries from helm values additionalAppConf
+    {{- range $key, $value := .Values.additionalAppConf.nonStringConf }}
+    {{ $key }} = {{ $value }}
+    {{- end }}
+{{- if and .Values.tls.enabled (not .Values.tls.certManager.enabled) }}
+{{- if .Values.useNginxProxy }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-yugaware-tls-cert
+  labels:
+    app: "{{ template "yugaware.name" . }}"
+    chart: "{{ template "yugaware.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+type: Opaque
+data:
+{{- include "getOrCreateServerCert" (dict "Namespace" .Release.Namespace "Root" . "Name" (printf "%s%s" .Release.Name "-yugaware-tls-cert")) | nindent 2 }}
+{{- end }}
+
+{{ if not .Values.useNginxProxy }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-yugaware-tls-pem
+  labels:
+    app: "{{ template "yugaware.name" . }}"
+    chart: "{{ template "yugaware.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+type: Opaque
+data:
+{{- include "getOrCreateServerPem" (dict "Namespace" .Release.Namespace "Root" . "Name" (printf "%s%s" .Release.Name "-yugaware-tls-pem")) | nindent 2 }}
+{{ end }}
+{{- end }}
+
+{{- if .Values.useNginxProxy }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-yugaware-nginx-config
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  default.conf: |
+{{- if .Values.tls.enabled }}
+    # Ref: https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+    server {
+      listen  {{ eq .Values.ip_version_support "v6_only" | ternary "[::]:8080" "8080" }};
+      server_name {{ .Values.tls.hostname }};
+      return  301  https://$host$request_uri;
+    }
+{{- end }}
+
+    server {
+{{- if .Values.tls.enabled }}
+      listen       8443 ssl;
+      ssl_certificate /opt/certs/server.crt;
+      ssl_certificate_key /opt/certs/server.key;
+{{- if .Values.tls.sslProtocols }}
+      ssl_protocols {{ include "validate_nginx_ssl_protocols" . }};
+{{- end }}
+      server_name  {{ .Values.tls.hostname }};
+      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+{{- else }}
+      listen       {{ eq .Values.ip_version_support "v6_only" | ternary "[::]:8080" "8080" }};
+      server_name  {{ .Values.tls.hostname }};
+{{- end }}
+      proxy_http_version 1.1;
+      proxy_set_header X-Real-IP  $remote_addr;
+      proxy_set_header X-Forwarded-For $remote_addr;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $host;
+
+      location / {
+        proxy_pass http://{{ eq .Values.ip_version_support "v6_only" | ternary "[::1]" "127.0.0.1" }}:9000;
+      }
+{{- if .Values.nginx.db_node_proxy_enabled }}
+      location ~ "^/universes/.+/proxy/(?!(169.254.|127.))(.+):(7000|9000|9300|12000|13000)/(metrics|prometheus-metrics)$" {
+        proxy_pass "http://$2:$3/$4$is_args$args";
+    }
+{{- end }}
+
+      location ~ /settings/ha/internal/upload$ {
+        proxy_pass http://{{ eq .Values.ip_version_support "v6_only" | ternary "[::1]" "127.0.0.1" }}:9000;
+        client_max_body_size {{ .Values.nginx.upload_size }};
+      }
+    }
+{{ end }}
+{{- if not .Values.useYugabyteDB }}
+---
+{{- if not (and (.Values.ocpCompatibility.enabled) (eq .Values.image.postgres.registry "registry.redhat.io")) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-yugaware-pg-upgrade
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  pg-upgrade-11-to-14.sh: |
+    #!/bin/bash
+    set -x -o errexit
+
+    cd /pg_upgrade_logs/
+    if [ ! "$(ls -A ${PGDATANEW})" ] && [ "$(ls -A ${PGDATAOLD})" ];
+    then
+      echo "Upgrading PG data from ${PGDATAOLD} to ${PGDATANEW}"
+      # if fsGroup is set, we need to remove the sticky bit, and group
+      # write permission from the directories
+      chmod -R g-w-s "${PGDATAOLD}"
+      chmod g-w-s "${PGDATAOLD}"
+      docker-upgrade pg_upgrade | tee -a /pg_upgrade_logs/pg_upgrade_11_to_14.log;
+      echo "host all all all scram-sha-256" >> "${PGDATANEW}/pg_hba.conf";
+    fi
+{{- end }}
+{{- if .Values.securityContext.enabled }}
+---
+apiVersion: "v1"
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-yugaware-pg-prerun
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  pg-prerun.sh: |
+    #!/bin/bash
+    set -x -o errexit
+
+    mkdir -p $PGDATA && chown -R $PG_UID:$PG_GID $PGDATA;
+{{- end }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-pg-sample-config
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  postgresql.conf.sample: |
+    {{- range $conf_key, $conf_value := .Values.postgres.sampleConfig }}
+    {{ $conf_key }} = {{ squote $conf_value }}
+    {{- end }}
+
+{{- end }}
+{{- if .Values.useNginxProxy }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-yugaware-nginx-main-config
+  labels:
+    app: {{ template "yugaware.name" . }}
+    chart: {{ template "yugaware.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
+data:
+  nginx.conf: |
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /tmp/nginx.pid;
+
+    events {
+      worker_connections  {{ .Values.nginx.workerConnections }};
+    }
+
+    http {
+      proxy_temp_path /tmp/proxy_temp;
+      client_body_temp_path /tmp/client_temp;
+      fastcgi_temp_path /tmp/fastcgi_temp;
+      uwsgi_temp_path /tmp/uwsgi_temp;
+      scgi_temp_path /tmp/scgi_temp;
+
+      proxy_read_timeout  {{ template "get_nginx_proxyReadTimeoutSec" . }};
+
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+      access_log  /var/log/nginx/access.log  main;
+
+      sendfile        on;
+      #tcp_nopush     on;
+
+      keepalive_timeout  65;
+
+      #gzip  on;
+
+      include /etc/nginx/conf.d/*.conf;
+    }
+{{- end }}

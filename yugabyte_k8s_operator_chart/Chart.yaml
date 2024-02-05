@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: 2.21 
+version: 0.1.0 
+kubeVersion: ">=1.27.0-0"
+home: https://www.yugabyte.com
+description: YugabyteDB K8s Operator community version provides the abilty to create, update, delete universes and perform day 2 operations on them. 
+name: yugabyte-k8s-operator 
+maintainers:
+- name: Sanketh Indarapu
+  email: sanketh@yugabyte.com
+- name: Aman Nijhawan 
+  email: anijhawan@yugabyte.com
+annotations:
+  charts.openshift.io/name: yugabyte-k8s-opeartor 
