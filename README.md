@@ -180,7 +180,7 @@ spec:
 ## Additional Information
 
 - Ensure Kubernetes cluster version is 1.27 or higher.
-- CRDs are located in a file named `concatenated CRDs`.
+- CRDs are located in a file named `./crd/concatenated_crd.yaml`
 - The operator is provided as a Helm chart.
 
 ## Support
