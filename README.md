@@ -176,6 +176,13 @@ spec:
     - keyspace2.table2
   backupStorageLocation: example-backup-location
 ```
+## Testing
+We have tested this operator on GKE, EKS, AKS, it needs the following labels defined on the nodes to
+work correctly. 
+          ```
+          failure-domain.beta.kubernetes.io/region: us-west1
+          failure-domain.beta.kubernetes.io/zone: us-west1-b
+          ```
 
 ## Additional Information
 
