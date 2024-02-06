@@ -16,8 +16,8 @@ image:
   # Setting commonRegistry to say, quay.io overrides the registry settings for all images
   # including the yugaware image
 
-  repository: quay.io/yugabyte/yugaware
-  tag: 2.19.3.0-b140
+  repository: quay.io/yugabyte/yugabyte-k8s-operator 
+  tag: 2.21.1.0-b99925912 
   pullPolicy: IfNotPresent
   pullSecret: yugabyte-k8s-pull-secret
   ## Docker config JSON File name
@@ -95,16 +95,16 @@ yugaware:
   kubernetesOperatorEnabled: true 
   # Set namespace the operator watches for custom resources.
   # If default ""  the YBA k8s operator watches all namespaces.
-  kubernetesOperatorNamespace: ""
+  kubernetesOperatorNamespace: "tc"
   # Crash YBA if operator thread is not initialised correctly
   kubernetesOperatorCrashOnFailure: true
 
   # Create an initial user for YugabyteDB Anywhere. A user is required for YBA workflows.
   defaultUser:
-    enabled: false
+    enabled: true 
     username: yugabyte_k8s
     # Please set the password. Templating will fail if it is not set.
-    password: ""
+    password: "Password#123"
     code: k8soperator
     email: yugabyte_k8s@yugabyte.com
 
