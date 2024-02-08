@@ -99,6 +99,8 @@ data:
       health.ses_email_username = "{{ .Values.yugaware.health.username }}"
       health.ses_email_password = "{{ .Values.yugaware.health.password }}"
       kubernetes.storageClass = "{{ .Values.yugaware.storageClass }}"
+      kubernetes.yugawareImageRepository = "{{ .Values.image.repository }}"
+      kubernetes.yugawareImageTag = "{{ .Values.image.tag }}"
       kubernetes.pullSecretName = "{{ .Values.image.pullSecret }}"
       kubernetes.operator.enabled = "{{ .Values.yugaware.kubernetesOperatorEnabled }}"
       kubernetes.operator.namespace = "{{ .Values.yugaware.kubernetesOperatorNamespace }}"
