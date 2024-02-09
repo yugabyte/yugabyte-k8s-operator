@@ -5,8 +5,6 @@
 fullnameOverride: ""
 nameOverride: ""
 
-useNginxProxy: false
-
 # Use YugabyteDB as the backend DB for YB Anywhere (Yugaware)
 # instead of PostgreSQL.
 useYugabyteDB: false
@@ -95,7 +93,7 @@ yugaware:
   kubernetesOperatorEnabled: true 
   # Set namespace the operator watches for custom resources.
   # If default ""  the YBA k8s operator watches all namespaces.
-  kubernetesOperatorNamespace: "testoperator"
+  kubernetesOperatorNamespace: ""
   # Crash YBA if operator thread is not initialised correctly
   kubernetesOperatorCrashOnFailure: true
 

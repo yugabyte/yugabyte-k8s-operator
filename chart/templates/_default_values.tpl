@@ -13,6 +13,3 @@
     new variables, default values can be specified in this file.
 */}}
 
-{{- define "get_nginx_proxyReadTimeoutSec" -}}
-    {{ .Values.nginx.proxyReadTimeoutSec | default 600 }}
-{{- end -}}

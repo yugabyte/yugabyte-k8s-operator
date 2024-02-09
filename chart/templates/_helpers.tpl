@@ -70,18 +70,6 @@ In both cases, image.tag can be used to customize the tag of the yugaware image.
 {{- end -}}
 
 {{/*
-Validate Nginx SSL protocols
-*/}}
-{{- define "validate_nginx_ssl_protocols" -}}
-  {{- $sslProtocolsRegex := `^((TLSv(1|1\.[1-3]))(?: ){0,1}){1,4}$` -}}
-  {{- if not (regexMatch $sslProtocolsRegex .Values.tls.sslProtocols) -}}
-    {{- fail (cat "Please specify valid tls.sslProtocols, must match regex:" $sslProtocolsRegex) -}}
-  {{- else -}}
-    {{- .Values.tls.sslProtocols -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Get or generate PG password
 Source - https://github.com/helm/charts/issues/5167#issuecomment-843962731
 */}}
