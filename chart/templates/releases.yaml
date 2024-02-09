@@ -1,0 +1,40 @@
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: Release
+metadata:
+  name: "2.19.3.0-b140"  
+spec:
+  config:
+    version: "2.19.3.0-b140"
+    downloadConfig:
+      http:
+        paths:
+          helmChart: "https://charts.yugabyte.com/yugabyte-2.19.3.tgz" 
+
+---
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: Release
+metadata:
+  name: "2.20.1.3-b3"
+spec:
+  config:
+    version: "2.20.1.3-b3"
+    downloadConfig:
+      http:
+        paths:
+          helmChart: "https://charts.yugabyte.com/yugabyte-2.20.1.tgz" 
+
+---
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: Release
+metadata:
+  name:  "2.18.6.0-b73"
+spec:
+  config:
+    version: "2.18.6.0-b73" 
+    downloadConfig:
+      http:
+        paths:
+          helmChart: "https://charts.yugabyte.com/yugabyte-2.18.6.tgz" 
+
+---
+
