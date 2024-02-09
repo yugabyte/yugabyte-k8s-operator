@@ -41,11 +41,24 @@ To verify the installation of the operator:
 
 ```shell
 kubectl get pods -n <operator_namespace>
-[centos@dev-server-anijhawan-4 yugabyte_k8s_operator_chart]$ kubectl get pods -n vcluster-yba
+[centos@dev-server-anijhawan-4 yugabyte_k8s_operator_chart]$ kubectl get pods -n <operator_namespace> 
 NAME                          READY   STATUS    RESTARTS   AGE
 chart-1706728534-yugaware-0   3/3     Running   0          26h
 
 ```
+Check for available releases for yugabyte operator to use. 
+
+```
+[centos@dev-server-anijhawan-4 yugabyte-k8s-operator]$ kubectl get releases -n testoperator
+NAME                VERSION         STATUS      DOWNLOADED
+2.18.6.0-b73        2.18.6.0-b73    Available   true
+2.19.3.0-b140       2.19.3.0-b140   Available   true
+2.20.1.3-b3         2.20.1.3-b3     Available   true
+```
+
+
+
+
 
 
 ### Service Account
@@ -62,6 +75,9 @@ The operator chart, when installed with `rbac.create=true`, will automatically c
 ## Custom Resource Definitions (CRDs)
 
 The operator supports various CRDs for managing YugabyteDB clusters, software releases, backups, and restores. Detailed configurations for each CRD are available in the operator's documentation or the CRD YAML files.
+
+## Getting Started
+
 
 ## Example CRs
 To create a universe:
@@ -85,7 +101,7 @@ spec:
   enableNodeToNodeEncrypt: true                                                                         
   enableClientToNodeEncrypt: true                                                                       
   enableExposingService: "EXPOSED"                                                                      
-  ybSoftwareVersion: "2.19.3.0-b80"                                                                     
+  ybSoftwareVersion: "2.20.1.3-b3" 
   enableYSQLAuth: false                                                                                 
   enableYCQL: true                                                                                      
   enableYCQLAuth: false                                                                                 
@@ -112,19 +128,14 @@ To add a new software release to use of yugabyteDB
 apiVersion: operator.yugabyte.io/v1alpha1
 kind: Release
 metadata:
-  name: release-2
+  name: example-release7
 spec:
   config:
-    version: "2.18.0.0-b1"
+    version: "2.19.3.0-b140"
     downloadConfig:
-      s3:
-        accessKeyId: "_AWS_ACCESS_KEY" 
-        secretAccessKey: "_AWS_SECRET_KEY"
+      http:
         paths:
-          x86_64: "s3://releases.yugabyte.com/2.18.0.0-b1/yugabyte-2.18.0.0-b1-centos-x86_64.tar.gz" 
-          x86_64_checksum: "MD5:5c61bc3b4965efc1f10d312401388a24"
-          helmChart: "s3://releases.yugabyte.com/2.18.0.0-b1/helm/yugabyte-2.18.0.tgz"
-          helmChartChecksum: "MD5:e2a77922022c0eabe780a912745f1536"
+          helmChart: "https://charts.yugabyte.com/yugabyte-2.19.3.tgz" 
 ```
 
 To create a backup
