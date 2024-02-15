@@ -89,18 +89,10 @@ metadata:
 spec:                                                                                                                                                                               
   numNodes:    3                                                                                        
   replicationFactor:  1                                                                                 
-  masterK8SNodeResourceSpec:                                                                            
-    memoryGib: 4                                                                                        
-    cpuCoreCount: 1.5                                                                                   
-  tserverK8SNodeResourceSpec:                                                                           
-    memoryGib: 4                                                                                        
-    cpuCoreCount: 2.8                                                                                   
-  assignPublicIP: true                                                                                  
-  useTimeSync: true                                                                                     
   enableYSQL: true                                                                                      
   enableNodeToNodeEncrypt: true                                                                         
   enableClientToNodeEncrypt: true                                                                       
-  enableExposingService: "EXPOSED"                                                                      
+  enableLoadBalancer: false 
   ybSoftwareVersion: "2.20.1.3-b3" 
   enableYSQLAuth: false                                                                                 
   enableYCQL: true                                                                                      
