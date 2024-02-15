@@ -16,4 +16,4 @@ spec:
   maxUnavailable: {{ .Values.yugaware.podDisruptionBudget.maxUnavailable | toJson }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-yugaware
+      app: {{ .Release.Name }}-yugabyte-k8s-operator

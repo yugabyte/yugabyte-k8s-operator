@@ -35,7 +35,7 @@ spec:
   - name: metrics
     port: 9090
   selector:
-    app: {{ .Release.Name }}-yugaware
+    app: {{ .Release.Name }}-yugabyte-k8s-operator
   type: "{{ .Values.yugaware.service.type }}"
   {{- if and (eq .Values.yugaware.service.type "LoadBalancer") (.Values.yugaware.service.ip) }}
   loadBalancerIP: "{{ .Values.yugaware.service.ip }}"
@@ -66,7 +66,7 @@ spec:
       path: api/v1/prometheus_metrics
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-yugaware
+      app: {{ .Release.Name }}-yugabyte-k8s-operator
 {{- end }}
 {{- if and (not .Values.useYugabyteDB) .Values.postgres.service.enabled }}
 ---
@@ -89,7 +89,7 @@ spec:
     port: 5432
     targetPort: 5432
   selector:
-    app: {{ .Release.Name }}-yugaware
+    app: {{ .Release.Name }}-yugabyte-k8s-opereator
   type: {{ .Values.postgres.service.type }}
   {{- if and (eq .Values.postgres.service.type "LoadBalancer") (.Values.postgres.service.ip) }}
   loadBalancerIP: "{{ .Values.postgres.service.ip }}"

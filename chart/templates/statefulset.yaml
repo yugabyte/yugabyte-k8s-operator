@@ -4,9 +4,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-yugaware
+  name: {{ .Release.Name }}-yugabyte-k8s-operator
   labels:
-    app: {{ .Release.Name }}-yugaware
+    app: {{ .Release.Name }}-yugabyte-k8s-operator
     chart: {{ template "yugaware.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Values.helm2Legacy | ternary "Tiller" (.Release.Service | quote) }}
@@ -15,7 +15,7 @@ spec:
   replicas: {{ .Values.yugaware.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-yugaware
+      app: {{ .Release.Name }}-yugabyte-k8s-operator 
   template:
     metadata:
       annotations:
@@ -24,7 +24,7 @@ spec:
 {{ toYaml .Values.yugaware.pod.annotations | indent 8 }}
 {{- end }}
       labels:
-        app: {{ .Release.Name }}-yugaware
+        app: {{ .Release.Name }}-yugabyte-k8s-operator
 {{- if .Values.yugaware.pod.labels }}
 {{ toYaml .Values.yugaware.pod.labels | indent 8 }}
 {{- end }}
