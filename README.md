@@ -42,8 +42,8 @@ To verify the installation of the operator:
 ```shell
 kubectl get pods -n <operator_namespace>
 [centos@dev-server-anijhawan-4 yugabyte_k8s_operator_chart]$ kubectl get pods -n <operator_namespace> 
-NAME                          READY   STATUS    RESTARTS   AGE
-chart-1706728534-yugaware-0   3/3     Running   0          26h
+NAME                                       READY   STATUS    RESTARTS   AGE
+chart-1706728534-yugabyte-k8s-operator-0   3/3     Running   0          26h
 
 ```
 Check for available releases for yugabyte operator to use. 
@@ -74,7 +74,111 @@ The operator chart, when installed with `rbac.create=true`, will automatically c
 
 ## Custom Resource Definitions (CRDs)
 
-The operator supports various CRDs for managing YugabyteDB clusters, software releases, backups, and restores. Detailed configurations for each CRD are available in the operator's documentation or the CRD YAML files.
+The operator supports various CRDs for managing YugabyteDB clusters, software releases, backups, and restores. 
+Detailed configurations for each CRD are available in the operator's schema, these can be viewed
+using kubectl explain or a tool like kubectl explore.
+
+Example
+```
+[centos@dev-server-anijhawan-4 resources]$ kubectl explain ybuniverse.spec
+GROUP:   operator.yugabyte.io
+KIND:    YBUniverse
+VERSION:  v1alpha1
+
+FIELD: spec <Object>
+
+DESCRIPTION:
+  Schema spec for a yugabytedb universe.
+
+FIELDS:
+ deviceInfo  <Object>
+  Device information for the universe to refer to storage information for
+  volume, storage classes etc.
+
+ enableClientToNodeEncrypt   <boolean>
+  Enable client to node encryption in the universe. Enable this to use tls
+  enabled connnection between client and database.
+
+ enableIPV6  <boolean>
+  Enable IPV6 in the universe.
+
+ enableLoadBalancer  <boolean>
+  Enable LoadBalancer access to the universe. Creates a service with
+  Type:LoadBalancer in the universe for tserver and masters.
+
+ enableNodeToNodeEncrypt    <boolean>
+  Enable node to node encryption in the universe. This encrypts the data in
+  transit between nodes.
+
+ enableYCQL  <boolean>
+  Enable YCQL interface in the universe.
+
+ enableYCQLAuth    <boolean>
+  enableYCQLAuth enables authentication for YCQL inteface.
+
+ enableYSQL  <boolean>
+  Enable YSQL interface in the universe.
+
+ enableYSQLAuth    <boolean>
+  enableYSQLAuth enables authentication for YSQL inteface.
+
+ gFlags    <Object>
+  Configuration flags for the universe. These can be set on masters or
+  tservers
+
+ kubernetesOverrides  <Object>
+  Kubernetes overrides for the universe. Please refer to yugabyteDB
+  documentation for more details.
+  https://docs.yugabyte.com/preview/yugabyte-platform/create-deployments/create-universe-multi-zone-kubernetes/#configure-helm-overrides
+
+ numNodes   <integer>
+  Number of tservers in the universe to create.
+
+ providerName <string>
+  Preexisting Provider name to use in the universe.
+
+ replicationFactor   <integer>
+  Number of times to replicate data in a universe.
+
+ universeName <string>
+  Name of the universe object to create
+
+ ybSoftwareVersion   <string>
+  Version of DB software to use in the universe.
+
+ ycqlPassword <Object>
+  Used to refer to secrets if enableYCQLAuth is set.
+
+ ysqlPassword <Object>
+  Used to refer to secrets if enableYSQLAuth is set.
+
+ zoneFilter  <[]string>
+  Only deploy yugabytedb nodes in these zones mentioned in the list. Defaults
+  to all zones if unspecified.
+
+
+[centos@dev-server-anijhawan-4 resources]$ kubectl explain ybuniverse.spec.gFlags
+GROUP:   operator.yugabyte.io
+KIND:    YBUniverse
+VERSION:  v1alpha1
+
+FIELD: gFlags <Object>
+
+DESCRIPTION:
+  Configuration flags for the universe. These can be set on masters or
+  tservers
+
+FIELDS:
+ masterGFlags <map[string]string>
+  Configuration flags for the master process in the universe.
+
+ perAZ <map[string]Object>
+  Configuration flags per AZ per process in the universe.
+
+ tserverGFlags <map[string]string>
+  Configuration flags for the tserver process in the universe.
+
+```
 
 ## Getting Started
 
