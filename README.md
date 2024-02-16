@@ -1,15 +1,19 @@
 
-# Yugabyte Kubernetes Operator Documentation
+# YugabyteDB Kubernetes Operator Documentation
 
 ## Overview
 
-The Yugabyte Kubernetes Operator automates the deployment and management of YugabyteDB clusters on
+The YugabyteDB Kubernetes Operator automates the deployment and management of YugabyteDB clusters on
 Kubernetes. It goes beyond yugabyteDB  current management automation 
 (which relies on REST APIs and GUIs and helm charts).
-Establishing a YBDB cluster as a custom resource natively in K8s
-Providing k8s methods and native CLIs against the YBDB Cluster for the purpose of backup, upgrade,
-and scale out, scale in, changing of gFlags, changing of cpu & memory, and other reconfiguration
-activities. 
+
+The operator establishes **ybuniverse** as a custom resource in kuberntes and enables declarative 
+management of yugabytedb universe by updating the CRs
+We support deploying and customizing the ybuniverse resources such as CPU, memomry, disks. 
+Allow the deployment of a multi-AZ balanced yugabytedb universe on the underlying cluster. 
+The CR supports seamless no downtime upgrades of the yugabytedb universe. 
+The operator also supports transparent scale up/scale down/scale out and scale in operations 
+
 
 As part of this first release, we also relase some additonal CRDs to manage the day2 operations of
 the yugabytedb universe. 
