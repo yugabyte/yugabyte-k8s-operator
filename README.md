@@ -29,7 +29,7 @@ on setting up necessary roles and permissions for the service account.
 ## Prerequisites
 
 - **Kubernetes Cluster**: Version 1.27 or later.
-- **Helm**: Version 3 or later.
+- **Helm**: Version 3.11 or later.
 - **Administrative Access**: Required for the Kubernetes cluster, abilty to create cluster roles, roles, namespaces
 
 ## Installation
