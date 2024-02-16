@@ -18,39 +18,58 @@ spec:
       storage: true
       schema:
         openAPIV3Schema:
+          description: Custom resource definition for YugabyteDB backups.
           type: object
           properties:
             status:
               type: object
+              description: Backup status for the backup custom resource.
               properties:
                 message:
+                  description: String log message from backup controller
                   type: string
                 resourceUUID:
+                  description: Internal UUID of the backup resource.
                   type: string
                 taskUUID:
+                  description: Internal UUID of the task associated with the backup resource.
                   type: string
 
             spec:
               type: object
               properties:
                 backupType:
+                  description: >
+                    Type of backup to be taken.
+                    Allowed values are -
+                    YQL_TABLE_TYPE REDIS_TABLE_TYPE PGSQL_TABLE_TYPE TRANSACTION_STATUS_TABLE_TYPE
                   type: string
                   enum:
                     - YQL_TABLE_TYPE
                     - PGSQL_TABLE_TYPE
                 sse:
+                  description: Server side encryption for the backup.
                   type: boolean
                 storageConfig:
+                  description: >
+                    Storage configuration for the backup,
+                    should contain name of storage config object
                   type: string
                 universe:
+                  description: >
+                    Name of the universe for which backup is to be taken,
+                    refers to a ybuniverse CR name.
                   type: string
                 tableByTableBackup:
+                  description: Boolean indicating if backup is to be taken table by table.
                   type: boolean
                 keyspaceTableList:
+                  description: List of Keyspaces to be backed up.
                   type: array
                   items:
                     type: string
                 timeBeforeDelete:
+                  description: Time before backup is deleted from storage in milliseconds.
                   type: integer
                   minimum: 0
 
@@ -89,47 +108,68 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
+          description: >
+            Custom resource definition for YugabyteDB release, describes a release.
           properties:
             status:
+              description: Release status on the cluster.
               type: object
               properties:
                 message:
+                  description: String log message from release controller
                   type: string
                 success:
+                  description: >
+                    Boolean indicating if the release was successfully
+                    downloaded and usable
                   type: boolean
                 resourceUUID:
+                  description: Internal UUID of the release resource.
                   type: string
             spec:
               type: object
+              description: Release object specification.
               properties:
                 config:
+                  description: Release download configration, we support GCS, S3 and HTTP.
                   type: object
                   properties:
                     version:
+                      description: >
+                        Version of the release chart to use.
+                        Refer to the release charts at charts.yugabyte.com
                       type: string
                     downloadConfig:
+                      description: >
+                        Download configugration,
+                        we support GCS, S3 and HTTP as download sources for now.
                       type: object
                       properties:
                         s3:
+                          description: S3 download configuration
                           type: object
                           properties:
                             accessKeyId:
+                              description: S3 access key
                               type: string
                             secretAccessKey:
+                              description: S3 secret key
                               type: string
                             paths:
+                              description: S3 paths to download the release from
                               type: object
                               properties:
                                 x86_64:
                                   type: string
-                                  description: Path to x86_64 package
+                                  description: Optional Path to x86_64 package
                                 x86_64_checksum:
                                   type: string
                                   description: Checksum for x86_64 package
                                 helmChart:
                                   type: string
-                                  description: Path to the Helm chart package
+                                  description: Required Path to the Helm chart package
                                 helmChartChecksum:
+                                  description: Optional checksum for Helm chart package
                                   type: string
                         gcs:
                           type: object
@@ -139,15 +179,16 @@ spec:
                               properties:
                                 x86_64:
                                   type: string
-                                  description: Path to x86_64 package
+                                  description: Optional Path to x86_64 package
                                 x86_64_checksum:
                                   type: string
-                                  description: Checksum for x86_64 package
+                                  description: Optional Checksum for x86_64 package
                                 helmChart:
                                   type: string
                                   description: Path to the Helm chart package
                                 helmChartChecksum:
                                   type: string
+                                  description: Optional checksum for Helm chart package
                             credentialsJson:
                               type: string
                               description: GCS service key JSON
@@ -159,15 +200,16 @@ spec:
                               properties:
                                 x86_64:
                                   type: string
-                                  description: Path to x86_64 package
+                                  description: Optional Path to x86_64 package
                                 x86_64_checksum:
                                   type: string
-                                  description: Checksum for x86_64 package
+                                  description: Optional Checksum for x86_64 package
                                 helmChart:
                                   type: string
                                   description: Path to the Helm chart package
                                 helmChartChecksum:
                                   type: string
+                                  description: Optional checksum for Helm chart package
 
 
 ---
@@ -191,28 +233,43 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
+          description: Custom resource definition for YugabyteDB restore job
           properties:
             status:
               type: object
+              description: Restore job status for the restore job custom resource.
               properties:
                 message:
+                  description: String log message from restore job controller
                   type: string
                 taskUUID:
+                  description: >
+                    Internal UUID of the task associated with
+                    the restore job resource.
                   type: string
                 resourceUUID:
+                  description: Internal UUID of the restore operation.
                   type: string
             spec:
               type: object
               properties:
                 actionType:
+                  description: Type of action to be taken. Allowed values - RESTORE
                   type: string
                   enum:
                     - RESTORE
                 universe:
+                  description: >
+                    Name of the universe for which restore is to be taken,
+                    refers to a ybuniverse CR name.
                   type: string
                 backup:
+                  description: >
+                    Name of the backup to be restored,
+                    refers to a backup CR name.
                   type: string
                 keyspace:
+                  description: Name of the keyspace to be restored.
                   type: string
 
 
@@ -236,21 +293,31 @@ spec:
       storage: true
       schema:
         openAPIV3Schema:
+          description: Custom resource definition for YugabyteDB backup storage configuration.
           type: object
           properties:
             status:
+              description: >
+                Storage configuration status for the storage configuration custom resource.
               type: object
               properties:
                 message:
+                  description: String log message from storage configuration controller.
                   type: string
                 success:
+                  description: >
+                    Boolean indicating if the storage configuration was successfully created.
                   type: boolean
                 resourceUUID:
+                  description: Internal UUID of the storage configuration resource.
                   type: string
             spec:
               type: object
               properties:
                 config_type:
+                  description:
+                    Type of storage configuration to be created.
+                    Allowed values - STORAGE_S3, STORAGE_NFS, STORAGE_GCS
                   type: string
                   enum:
                     - STORAGE_S3
@@ -258,14 +325,19 @@ spec:
                     - STORAGE_GCS
                 data:
                   type: object
+                  description: Data object to create storage configuration.
                   properties:
                     AWS_ACCESS_KEY_ID:
+                      description: AWS access key id for the S3 storage configuration.
                       type: string
                     AWS_SECRET_ACCESS_KEY:
+                      description: AWS secret access key for the S3 storage configuration.
                       type: string
                     BACKUP_LOCATION:
+                      description: Backup location for the NFS storage configuration.
                       type: string
                     GCS_CREDENTIALS_JSON:
+                      description: GCS credentials JSON for the GCS storage configuration.
                       type: string
 
 
@@ -291,40 +363,56 @@ spec:
       storage: true
       schema:
         openAPIV3Schema:
+          description: >
+            Custom resource definition for YugabyteDB support bundle to capture logs,
+            events in case of failures.
           type: object
           properties:
             status:
+              description: Support bundle status for the support bundle custom resource.
               type: object
               properties:
                 status:
+                  description: >
+                    Status of the support bundle.
+                    Allowed values - generating, ready, failed
                   type: string
                   enum:
                   - generating
                   - ready
                   - failed
                 access:
+                  description: Access details for the generated support bundle to download.
                   type: string
                 resourceUUID:
+                  description: Internal UUID of the support bundle resource.
                   type: string
             spec:
               type: object
               properties:
                 universeName:
+                  description: >
+                    Name of the universe for which support bundle is to be generated,
+                    refers to a ybuniverse CR name.
                   type: string
                 collectionTimerange:
+                  description: Time range for which logs and events are to be collected.
                   type: object
                   properties:
                     startDate:
+                      description: Start date for the logs and events collection.
                       type: string
                       example: 2022-12-12T13:07:18Z,
                       format: date-time
                     endDate:
+                      description: End date for the logs and events collection.
                       type: string
                       example: 2022-12-12T13:07:18Z,
                       format: date-time
                   required:
                   - startDate
                 components:
+                  description: Components for which logs and events are to be collected.
                   type: array
                   items:
                     type: string
@@ -356,37 +444,54 @@ spec:
     schema:
       openAPIV3Schema:
         type: object
+        description: >
+          Custom resource definition for YugabyteDB universe.
+          This CR describes the universe configuration for an instance of yugabytedb database.
+          For details about YugabyteDB please refer to https://docs.yugabyte.com/
         properties:
           spec:
             type: object
+            description: Schema spec for a yugabytedb universe.
             x-kubernetes-validations:
               - message: replicationFactor <= numNodes
                 rule: self.replicationFactor <= self.numNodes
             properties:
               universeName:
                 type: string
+                description: Name of the universe object to create
                 x-kubernetes-validations:
                 - message: universeName cannot be changed once set.
                   rule: self == oldSelf
               numNodes:
+                description: Number of tservers in the universe to create.
                 type: integer
               replicationFactor:
+                description: Number of times to replicate data in a universe.
                 type: integer
                 x-kubernetes-validations:
                 - message: Replication Factor is cannot be changed
                   rule: self == oldSelf
               gFlags:
+                description: >
+                  Configuration flags for the universe.
+                  These can be set on masters or tservers
                 type: object
                 properties:
                   tserverGFlags:
+                    description: >
+                      Configuration flags for the tserver process in the universe.
                     type: object
                     additionalProperties:
                       type: string
                   masterGFlags:
+                    description: >
+                      Configuration flags for the master process in the universe.
                     type: object
                     additionalProperties:
                       type: string
                   perAZ:
+                    description: >
+                      Configuration flags per AZ per process in the universe.
                     type: object
                     additionalProperties:
                       type: object
@@ -401,31 +506,44 @@ spec:
                             type: string
 
               enableYSQL:
+                description: Enable YSQL interface in the universe.
                 default: true
                 type: boolean
                 x-kubernetes-validations:
                 - message: enableYSQL cannot be changed
                   rule: self == oldSelf
               enableNodeToNodeEncrypt:
+                description: >
+                  Enable node to node encryption in the universe.
+                  This encrypts the data in transit between nodes.
                 type: boolean
                 default: true
                 x-kubernetes-validations:
                 - message: enableNodeToNodeEncrypt cannot be changed
                   rule: self == oldSelf
               enableClientToNodeEncrypt:
+                description: >
+                  Enable client to node encryption in the universe.
+                  Enable this to use tls enabled connnection between
+                  client and database.
                 type: boolean
                 default: true
                 x-kubernetes-validations:
                 - message: enableClientToNodeEncrypt cannot be changed
                   rule: self == oldSelf
               ybSoftwareVersion:
+                description: Version of DB software to use in the universe.
                 type: string
               providerName:
+                description: Preexisting Provider name to use in the universe.
                 type: string
                 x-kubernetes-validations:
                 - message: providerName cannot be changed
                   rule: self == oldSelf
               zoneFilter:
+                description: >
+                  Only deploy yugabytedb nodes in these zones mentioned in the list.
+                  Defaults to all zones if unspecified.
                 type: array
                 x-kubernetes-validations:
                 - message: zoneFilter cannot be changed
@@ -433,12 +551,14 @@ spec:
                 items:
                   type: string
               enableYSQLAuth:
+                description: enableYSQLAuth enables authentication for YSQL inteface.
                 type: boolean
                 default: false
                 x-kubernetes-validations:
                   - message: enableYSQL auth cannot be changed once set.
                     rule: self == oldSelf
               ysqlPassword:
+                description: Used to refer to secrets if enableYSQLAuth is set.
                 type: object
                 x-kubernetes-validations:
                 - message: ysqlPassword cannot be changed once set.
@@ -449,18 +569,21 @@ spec:
                 required:
                 - secretName
               enableYCQL:
+                description: Enable YCQL interface in the universe.
                 type: boolean
                 default: false
                 x-kubernetes-validations:
                 - message: enableYCQL cannot be changed once set.
                   rule: self == oldSelf
               enableYCQLAuth:
+                description: enableYCQLAuth enables authentication for YCQL inteface.
                 type: boolean
                 default: false
                 x-kubernetes-validations:
                 - message: enableYCQLAuth cannot be changed once set.
                   rule: self == oldSelf
               ycqlPassword:
+                description: Used to refer to secrets if enableYCQLAuth is set.
                 type: object
                 x-kubernetes-validations:
                 - message:  ycqlPassword cannot be changed once set.
@@ -471,18 +594,27 @@ spec:
                 required:
                 - secretName
               enableIPV6:
+                description: Enable IPV6 in the universe.
                 type: boolean
                 default: false
                 x-kubernetes-validations:
                 - message:   enableIPV6 cannot be changed once set.
                   rule: self == oldSelf
               enableLoadBalancer:
+                description: >
+                  Enable LoadBalancer access to the universe.
+                  Creates a service with Type:LoadBalancer
+                  in the universe for tserver and masters.
                 type: boolean
                 default: false
                 x-kubernetes-validations:
                 - message:   enableExposingService cannot be changed once set.
                   rule: self == oldSelf
               deviceInfo:
+                description: >
+                  Device information for the universe to
+                  refer to storage information for volume,
+                  storage classes etc.
                 properties:
                   volumeSize:
                     type: integer
@@ -500,10 +632,14 @@ spec:
                         rule: self == oldSelf
                 type: object
               kubernetesOverrides:
+                description: >
+                  Kubernetes overrides for the universe.
+                  Please refer to yugabyteDB documentation for more details.
+                  https://docs.yugabyte.com/preview/yugabyte-platform/create-deployments/create-universe-multi-zone-kubernetes/#configure-helm-overrides
                 type: object
                 # Since this is not an exhaustive list yet.
                 # Helm chart can have a bunch more properties.
-                additionalProperties: true
+                x-kubernetes-preserve-unknown-fields: true
                 properties:
                   resource:
                     type: object
@@ -1580,15 +1716,20 @@ spec:
                       type: string
                     type: object
           status:
+            description: Status of the universe CR
             type: object
             properties:
               universeState:
+                description: >
+                  The state of the universe  (e.g. "Ready", "Creating", "Editing", "Deleting")
                 type: string
               sqlEndpoints:
+                description: SQL endpoints for the universe.
                 type: array
                 items:
                   type: string
               cqlEndpoints:
+                description: CQL endpoints for the universe.
                 type: array
                 items:
                   type: string
