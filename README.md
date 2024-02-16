@@ -18,9 +18,10 @@ The operator also supports transparent scale up/scale down/scale out and scale i
 As part of this first release, we also relase some additonal CRDs to manage the day2 operations of
 the yugabytedb universe. 
 These include:
-  Release CRD - To run multiple releases of yugabytedb and upgrade the software in a universe.
-  Support Bundle CRD - To collect logs when universe fails.
-  Backup and Restore CRDs - To take full backup of universe and restore.
+  * Release CRD - To run multiple releases of yugabytedb and upgrade the software in a universe.
+  * Support Bundle CRD - To collect logs when universe fails.
+  * Backup and Restore CRDs - To take full backup of universe and restore.
+  * Storage Config CRD - To configure backup destinations.
 
 This documentation is intended for Kubernetes clusters version 1.27 and above and includes details 
 on setting up necessary roles and permissions for the service account.
