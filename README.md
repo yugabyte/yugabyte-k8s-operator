@@ -1,5 +1,5 @@
 
-# YugabyteDB Kubernetes Operator Documentation
+# YugabyteDB Kubernetes Operator
 
 ## Overview
 
