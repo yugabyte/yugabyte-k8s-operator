@@ -311,6 +311,7 @@ work correctly.
           failure-domain.beta.kubernetes.io/region: us-west1
           failure-domain.beta.kubernetes.io/zone: us-west1-b
           ```
+In addtional to this we will be publishing directions to make it work on vcluster and minikube.
 
 ## Additional Information
 
