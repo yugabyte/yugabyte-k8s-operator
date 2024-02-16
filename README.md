@@ -3,7 +3,23 @@
 
 ## Overview
 
-The Yugabyte Kubernetes Operator automates the deployment and management of YugabyteDB clusters on Kubernetes. This documentation is intended for Kubernetes clusters version 1.27 and above and includes details on setting up necessary roles and permissions for the service account.
+The Yugabyte Kubernetes Operator automates the deployment and management of YugabyteDB clusters on
+Kubernetes. It goes beyond yugabyteDB  current management automation 
+(which relies on REST APIs and GUIs and helm charts).
+Establishing a YBDB cluster as a custom resource natively in K8s
+Providing k8s methods and native CLIs against the YBDB Cluster for the purpose of backup, upgrade,
+and scale out, scale in, changing of gFlags, changing of cpu & memory, and other reconfiguration
+activities. 
+
+As part of this first release, we also relase some additonal CRDs to manage the day2 operations of
+the yugabytedb universe. 
+These include:
+  Release CRD - To run multiple releases of yugabytedb and upgrade the software in a universe.
+  Support Bundle CRD - To collect logs when universe fails.
+  Backup and Restore CRDs - To take full backup of universe and restore.
+
+This documentation is intended for Kubernetes clusters version 1.27 and above and includes details 
+on setting up necessary roles and permissions for the service account.
 
 ## Prerequisites
 
