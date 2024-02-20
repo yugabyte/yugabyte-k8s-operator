@@ -371,7 +371,7 @@ full spec present in [sample cr for minikube](./miniKubeSampleCr.yaml) file
 - CRDs are located in a [concatenated crd spec file](./crd/concatenated_crd.yaml)
 - The operator is provided as a Helm chart.
 
-## Documentation
+## CRD Documentation
 The CRDs associated with the operator are self documenting and we use`kubectl explain` to document
 these. 
 
