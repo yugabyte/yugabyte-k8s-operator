@@ -642,9 +642,17 @@ spec:
                 x-kubernetes-preserve-unknown-fields: true
                 properties:
                   resource:
+                    description: >
+                      Set memory and cpu resource settings for master and tserver pods in
+                      the statefulset, these follow regular k8s resource quanity descriptions.
+                      memory needs to be set in whole number Gib, cpu can be fractional.
                     type: object
                     properties:
                       master:
+                        description: >
+                          Set memory and cpu resource settings for master pods. 
+                          These follow regular k8s resource quanity descriptions.
+                          memory needs to be set in whole number Gib, cpu can be fractional.
                         type: object
                         properties:
                           requests:
@@ -666,6 +674,11 @@ spec:
                                 type: string
                                 x-kubernetes-int-or-string: true
                       tserver:
+                        description: >
+                          Set memory and cpu resource settings for tserver pods. 
+                          These follow regular k8s resource quanity descriptions.
+                          memory needs to be set in whole number Gib, cpu can be fractional.
+                        type: object
                         type: object
                         properties:
                           requests:
@@ -687,6 +700,12 @@ spec:
                                 type: string
                                 x-kubernetes-int-or-string: true
                   master:
+                    description: > 
+                      Set overrides for master values.yaml such as affinity, labels,
+                      service account. 
+                      details on what can be overriden are provided at
+                      https://github.com/yugabyte/charts/blob/c21542dbc529a8eb9e39f5140402881f0801d862/stable/yugabyte/values.yaml#L366
+
                     type: object
                     properties:
                       affinity:
@@ -1188,6 +1207,11 @@ spec:
                             mountPath:
                               type: string
                   tserver:
+                    description: > 
+                      Set overrides for tserver such as affinity, labels, service account. 
+                      Details on what can be overriden are provided at
+                      https://github.com/yugabyte/charts/blob/c21542dbc529a8eb9e39f5140402881f0801d862/stable/yugabyte/values.yaml#L455
+                    type: object
                     type: object
                     properties:
                       affinity:
@@ -1693,6 +1717,10 @@ spec:
                             mountPath:
                               type: string
                   serviceEndpoints:
+                    description: > 
+                      Override default service endpoints created for the univerese. 
+                      As a default we support yb-master-ui, yb-masters, yb-tservers of 
+                      type LoadBalancer.
                     items:
                       properties:
                         name:
@@ -1712,6 +1740,14 @@ spec:
                       type: object
                     type: array
                   nodeSelector:
+                    description: >
+                      Specify nodeSelector labels, these will be used to deploy pods to specific 
+                      nodes.
+                      For Example -
+                         we can add a nodeSelector to only deploy to ssd labels.
+                         by adding
+                           disktype: ssd. 
+                           This will deploy yugabytedb pods only on nodes that have the label of ssd 
                     additionalProperties:
                       type: string
                     type: object
