@@ -1,0 +1,39 @@
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: YBUniverse
+metadata:
+  name: oss-demo-test-6
+spec:
+  numNodes:    1  
+  replicationFactor:  1 
+  enableYSQL: true
+  enableNodeToNodeEncrypt: true
+  enableClientToNodeEncrypt: true
+  enableLoadBalancer: false 
+  ybSoftwareVersion: "2.19.3.0-b140"
+  enableYSQLAuth: false 
+  enableYCQL: true
+  enableYCQLAuth: false 
+  gFlags:
+    tserverGFlags: {}
+    masterGFlags: {}
+  deviceInfo:
+    volumeSize: 500
+    numVolumes: 1
+    storageClass: "standard"
+  kubernetesOverrides:
+    resource:
+      master:
+        requests:
+          cpu: 1 
+          memory: 1Gi 
+        limits:
+          cpu: 3
+          memory: 8Gi
+      tserver:
+        requests:
+          cpu: 1 
+          memory: 1Gi 
+        limits:
+          cpu: 3
+          memory: 8Gi
+    

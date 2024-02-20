@@ -311,12 +311,57 @@ work correctly.
           failure-domain.beta.kubernetes.io/region: us-west1
           failure-domain.beta.kubernetes.io/zone: us-west1-b
           ```
-In addtional to this we will be publishing directions to make it work on vcluster and minikube.
+
+For minikube cluster, we tested that following workflow.
+minikube start --cpus 4 --memory 8192
+kubectl edit nodes
+
+```
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/cri-dockerd.sock
+    node.alpha.kubernetes.io/ttl: "0"
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  creationTimestamp: "2024-02-20T20:15:38Z"
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/os: linux
+    failure-domain.beta.kubernetes.io/region: region-1 <-- Added these labels
+    failure-domain.beta.kubernetes.io/zone: region-1-zone-1 <-- Added these lables
+    kubernetes.io/arch: amd64
+```
+
+Created a universe with minimal memory and cpu usage using k8soverrides. 
+```
+  kubernetesOverrides:
+    resource:
+      master:
+        requests:
+          cpu: 1 
+          memory: 1Gi 
+        limits:
+          cpu: 3
+          memory: 8Gi
+      tserver:
+        requests:
+          cpu: 1 
+          memory: 1Gi 
+        limits:
+          cpu: 3
+          memory: 8Gi
+```
+full spec present in [sample cr] (./miniKubeSampleCr.yaml) file
 
 ## Additional Information
 
 - Ensure Kubernetes cluster version is 1.27 or higher.
-- CRDs are located in a file named `./crd/concatenated_crd.yaml`
+- CRDs are located in a [file](./crd/concatenated_crd.yaml)
 - The operator is provided as a Helm chart.
 
 ## Support
