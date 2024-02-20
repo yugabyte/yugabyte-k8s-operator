@@ -356,12 +356,12 @@ Created a universe with minimal memory and cpu usage using k8soverrides.
           cpu: 3
           memory: 8Gi
 ```
-full spec present in [sample cr] (./miniKubeSampleCr.yaml) file
+full spec present in [sample cr for minikube](./miniKubeSampleCr.yaml) file
 
 ## Additional Information
 
 - Ensure Kubernetes cluster version is 1.27 or higher.
-- CRDs are located in a [file](./crd/concatenated_crd.yaml)
+- CRDs are located in a [concatenated crd spec file](./crd/concatenated_crd.yaml)
 - The operator is provided as a Helm chart.
 
 ## Support
