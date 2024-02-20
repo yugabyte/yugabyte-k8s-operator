@@ -311,12 +311,19 @@ work correctly.
           failure-domain.beta.kubernetes.io/region: us-west1
           failure-domain.beta.kubernetes.io/zone: us-west1-b
           ```
+### Minikube:
+We know testing an operator can be cumbersome due to resources needed and elvated permissions
+required. 
+To get around the resource issue, we verified that the operator and crds work with a minikube
+cluster. 
 
-For minikube cluster, we tested that following workflow.
+We tested the following workflow.
+```
 minikube start --cpus 4 --memory 8192
 kubectl edit nodes
 
-```
+
+
 # Please edit the object below. Lines beginning with a '#' will be ignored,
 # and an empty file will abort the edit. If an error occurs while saving this file will be
 # reopened with the relevant failures.
