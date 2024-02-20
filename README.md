@@ -364,6 +364,122 @@ full spec present in [sample cr for minikube](./miniKubeSampleCr.yaml) file
 - CRDs are located in a [concatenated crd spec file](./crd/concatenated_crd.yaml)
 - The operator is provided as a Helm chart.
 
+## Documentation
+The CRDs associated with the operator are self documenting and we use`kubectl explain` to document
+these. 
+
+Here is an example 
+
+```
+[centos@dev-server-anijhawan-4 yugabyte-k8s-operator]$  kubectl explain ybuniverse.spec.kubernetesOverrides
+GROUP:      operator.yugabyte.io
+KIND:       YBUniverse
+VERSION:    v1alpha1
+
+FIELD: kubernetesOverrides <Object>
+
+DESCRIPTION:
+    Kubernetes overrides for the universe. Please refer to yugabyteDB
+    documentation for more details.
+    https://docs.yugabyte.com/preview/yugabyte-platform/create-deployments/create-universe-multi-zone-kubernetes/#configure-helm-overrides
+
+
+FIELDS:
+  master	<Object>
+    Set overrides for master values.yaml such as affinity, labels, service
+    account.  details on what can be overriden are provided at
+    https://github.com/yugabyte/charts/blob/c21542dbc529a8eb9e39f5140402881f0801d862/stable/yugabyte/values.yaml#L366
+
+
+  nodeSelector	<map[string]string>
+    Specify nodeSelector labels, these will be used to deploy pods to specific
+    nodes. For Example -
+       we can add a nodeSelector to only deploy to ssd labels.
+       by adding
+         disktype: ssd.
+         This will deploy yugabytedb pods only on nodes that have the label of
+    ssd
+
+
+  resource	<Object>
+    Set memory and cpu resource settings for master and tserver pods in the
+    statefulset, these follow regular k8s resource quanity descriptions. memory
+    needs to be set in whole number Gib, cpu can be fractional.
+
+
+  serviceEndpoints	<[]Object>
+    Override default service endpoints created for the univerese.  As a default
+    we support yb-master-ui, yb-masters, yb-tservers of  type LoadBalancer.
+
+
+  tserver	<Object>
+    Set overrides for tserver such as affinity, labels, service account.
+    Details on what can be overriden are provided at
+    https://github.com/yugabyte/charts/blob/c21542dbc529a8eb9e39f5140402881f0801d862/stable/yugabyte/values.yaml#L455
+
+
+
+[centos@dev-server-anijhawan-4 yugabyte-k8s-operator]$  kubectl explain ybuniverse.spec.kubernetesOverrides.resource.master
+GROUP:      operator.yugabyte.io
+KIND:       YBUniverse
+VERSION:    v1alpha1
+
+FIELD: master <Object>
+
+DESCRIPTION:
+    Set memory and cpu resource settings for master pods.  These follow regular
+    k8s resource quanity descriptions. memory needs to be set in whole number
+    Gib, cpu can be fractional.
+
+
+FIELDS:
+  limits	<Object>
+    <no description>
+
+  requests	<Object>
+    <no description>
+
+[centos@dev-server-anijhawan-4 yugabyte-k8s-operator]$ kubectl explain backup.spec
+GROUP:      operator.yugabyte.io
+KIND:       Backup
+VERSION:    v1alpha1
+
+FIELD: spec <Object>
+
+DESCRIPTION:
+    <empty>
+FIELDS:
+  backupType	<string>
+    Type of backup to be taken. Allowed values are - YQL_TABLE_TYPE
+    REDIS_TABLE_TYPE PGSQL_TABLE_TYPE TRANSACTION_STATUS_TABLE_TYPE
+
+
+  keyspaceTableList	<[]string>
+    List of Keyspaces to be backed up.
+
+  sse	<boolean>
+    Server side encryption for the backup.
+
+  storageConfig	<string>
+    Storage configuration for the backup, should contain name of storage config
+    object
+
+
+  tableByTableBackup	<boolean>
+    Boolean indicating if backup is to be taken table by table.
+
+  timeBeforeDelete	<integer>
+    Time before backup is deleted from storage in milliseconds.
+
+  universe	<string>
+    Name of the universe for which backup is to be taken, refers to a ybuniverse
+    CR name.
+
+
+
+```
+
+
 ## Support
 
 For assistance or issues related to the Yugabyte Kubernetes Operator, please reach out to us on slack 
