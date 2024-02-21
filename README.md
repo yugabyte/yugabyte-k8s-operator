@@ -56,6 +56,8 @@ helm install -n <operator_namespace> yugabyte-k8s-operator yugabyte/yugabyte-ope
 This command sets up the necessary Role-Based Access Control (RBAC) permissions, 
 including the creation of cluster roles and roles within the service account.
 
+Here is [list of rbac roles](https://github.com/yugabyte/yugabyte-k8s-operator/blob/main/chart/templates/rbac.yaml#L37) that we required for the operator. 
+
 ### Verifying the Installation
 
 To verify the installation of the operator:
