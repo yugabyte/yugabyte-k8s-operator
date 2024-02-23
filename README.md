@@ -50,7 +50,7 @@ To install the Yugabyte Operator with necessary RBAC permissions:
 ```shell
 kubectl create ns <operator_namespace>
 kubectl apply -f crd/concatinated_crds.yaml
-helm install -n <operator_namespace> yugabyte-k8s-operator yugabyte/yugabyte-operator --set rbac.create=true
+helm install -n <operator_namespace> yugabyte-k8s-operator yugabyte/yugabyte-operator --set rbac.create=true --kubernetesOperatorNamespace=operator_namespace
 ```
 
 This command sets up the necessary Role-Based Access Control (RBAC) permissions, 
