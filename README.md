@@ -48,9 +48,12 @@ helm repo update
 To install the Yugabyte Operator with necessary RBAC permissions:
 
 ```shell
-kubectl create ns <operator_namespace>
-kubectl apply -f crd/concatinated_crd.yaml
-helm install -n <operator_namespace> yugabyte-k8s-operator yugabyte/yugabyte-operator --set rbac.create=true --kubernetesOperatorNamespace=operator_namespace
+clone this repo.
+git clone
+kubectl create ns operator-test
+kubectl apply -f ./crd/concatinated_crd.yaml
+cd ./charts
+helm install . -n operator-test --set rbac.create=true --set kubernetesOperatorNamespace=operator-test --generate-name
 ```
 
 This command sets up the necessary Role-Based Access Control (RBAC) permissions, 
