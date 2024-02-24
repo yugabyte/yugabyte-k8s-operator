@@ -49,7 +49,7 @@ To install the Yugabyte Operator with necessary RBAC permissions:
 
 ```shell
 kubectl create ns <operator_namespace>
-kubectl apply -f crd/concatinated_crds.yaml
+kubectl apply -f crd/concatinated_crd.yaml
 helm install -n <operator_namespace> yugabyte-k8s-operator yugabyte/yugabyte-operator --set rbac.create=true --kubernetesOperatorNamespace=operator_namespace
 ```
 
