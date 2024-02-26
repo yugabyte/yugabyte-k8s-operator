@@ -353,7 +353,7 @@ metadata:
 Created a universe with minimal memory and cpu usage using k8soverrides. 
 ```
   kubernetesOverrides:
-    resource:
+    resources:
       master:
         requests:
           cpu: 1 
