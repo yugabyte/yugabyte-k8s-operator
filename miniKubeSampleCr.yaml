@@ -24,14 +24,14 @@ spec:
     resource:
       master:
         requests:
-          cpu: 1 
+          cpu:  500m 
           memory: 1Gi 
         limits:
           cpu: 3
           memory: 8Gi
       tserver:
         requests:
-          cpu: 1 
+          cpu:  500m 
           memory: 1Gi 
         limits:
           cpu: 3
