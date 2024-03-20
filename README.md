@@ -494,9 +494,15 @@ FIELDS:
 
 ## Limitations
 yugabyte-k8s-operator is early alpha version, we recommend using the yugabytedb helm charts for deploying production usecases on kubernetes.
+
 yugabyte-k8s-operator can only be used to deploy universes on the same kubernetes cluster as it is deployed on.
+
 xCluster cannot be configured via the K8s operator.   (Note: it can still be used, but not explicitly configured via the K8s operator.  See xCluster docs)
-Operator is single cluster only, does not support multicluster universes. 
+
+yugabyte-k8s-operator is single cluster only, does not support multicluster universes. 
+
+yugabyte-k8s-operator does not support software upgrade rollback currently.
+
 Only above listed operations can be performed on the universes via the yugabyte-k8s-operator, for any operations not listed above consult official yugabtyedb documents 
 
 ## Support
