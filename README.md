@@ -52,8 +52,8 @@ clone this repo.
 git clone
 kubectl create ns operator-test
 kubectl apply -f ./crd/concatinated_crd.yaml
-cd ./charts
-helm install . -n operator-test --set rbac.create=true --set kubernetesOperatorNamespace=operator-test --generate-name
+cd ./chart
+helm install . -n operator-test --debug --timeout 3600s --set rbac.create=true --set kubernetesOperatorNamespace=operator-test --generate-name 
 ```
 
 This command sets up the necessary Role-Based Access Control (RBAC) permissions, 
