@@ -32,7 +32,9 @@ roleRef:
   kind: ClusterRole
   name: cluster-monitoring-view
   apiGroup: rbac.authorization.k8s.io
-{{- else }}
+{{- end }}
+{{/* Always create rest of the RBAC permissions when operator is enabled */}}
+{{- if or (not .Values.ocpCompatibility.enabled) .Values.yugaware.kubernetesOperatorEnabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
