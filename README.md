@@ -49,9 +49,10 @@ To install the Yugabyte Operator with necessary RBAC permissions:
 
 ```shell
 clone this repo.
-git clone
+git clone https://github.com/yugabyte/yugabyte-k8s-operator
+cd yugabyte-k8s-operator
 kubectl create ns operator-test
-kubectl apply -f ./crd/concatinated_crd.yaml
+kubectl apply -f ./crd/concatenated_crd.yaml
 cd ./chart
 helm install . -n operator-test --debug --timeout 3600s --set rbac.create=true --set kubernetesOperatorNamespace=operator-test --generate-name 
 ```
