@@ -1,6 +1,6 @@
 apiVersion: v2
 appVersion: 2.21 
-version: 0.1.3 
+version: 0.1.4 
 kubeVersion: ">=1.27.0-0"
 home: https://www.yugabyte.com
 description: >
@@ -13,4 +13,4 @@ maintainers:
 - name: Aman Nijhawan 
   email: anijhawan@yugabyte.com
 annotations:
-  charts.openshift.io/name: yugabyte-k8s-opeartor 
+  charts.openshift.io/name: yugabyte-k8s-operator 
