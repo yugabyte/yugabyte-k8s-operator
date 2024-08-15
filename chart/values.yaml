@@ -15,7 +15,7 @@ image:
   # including the yugaware image
 
   repository: quay.io/yugabyte/yugabyte-k8s-operator 
-  tag: 0.1.3
+  tag: 0.1.4
   pullPolicy: IfNotPresent
   pullSecret: yugabyte-k8s-pull-secret
   ## Docker config JSON File name
@@ -93,7 +93,7 @@ yugaware:
   kubernetesOperatorEnabled: true 
   # Set namespace the operator watches for custom resources.
   # If default ""  the YBA k8s operator watches all namespaces.
-  kubernetesOperatorNamespace: ""
+  kubernetesOperatorNamespace: "operator-test"
   # Crash YBA if operator thread is not initialised correctly
   kubernetesOperatorCrashOnFailure: true
 
@@ -288,7 +288,7 @@ securityContext:
   runAsNonRoot: true
 
 helm:
-  timeout: 900
+  timeout: 100 
   packagePath: "/opt/yugabyte/helm"
 
 domainName: "cluster.local"
