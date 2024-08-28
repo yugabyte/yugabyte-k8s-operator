@@ -7,7 +7,7 @@ The YugabyteDB Kubernetes Operator automates the deployment and management of Yu
 Kubernetes. It goes beyond yugabyteDB  current management automation 
 (which relies on REST APIs and GUIs and helm charts).
 
-The operator establishes **ybuniverse** as a custom resource in kuberntes and enables declarative 
+The operator establishes **ybuniverse** as a custom resource in kubernetes and enables declarative 
 management of yugabytedb universe by updating the CRs
 We support deploying and customizing the ybuniverse resources such as CPU, memomry, disks. 
 Allow the deployment of a multi-AZ balanced yugabytedb universe on the underlying cluster. 
