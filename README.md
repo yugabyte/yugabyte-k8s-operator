@@ -290,7 +290,7 @@ spec:
   storageConfig: "sco"
   universe: "operator-universe919"
   tableByTableBackup: false
-  keyspaceTableList: []
+  keyspace: "postgres" 
   timeBeforeDelete: 0
 ```
 
@@ -306,9 +306,7 @@ spec:
   universe: example-universe
   storageConfig: example-storage-config
   backupType: YQL_TABLE_TYPE
-  keyspaceTableList:
-    - keyspace1.table1
-    - keyspace2.table2
+  keyspace: newpostgres 
   backupStorageLocation: example-backup-location
 ```
 ## Testing
@@ -468,7 +466,7 @@ FIELDS:
     REDIS_TABLE_TYPE PGSQL_TABLE_TYPE TRANSACTION_STATUS_TABLE_TYPE
 
 
-  keyspaceTableList	<[]string>
+  keyspace	<string>
     List of Keyspaces to be backed up.
 
   sse	<boolean>
