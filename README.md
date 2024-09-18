@@ -467,7 +467,7 @@ FIELDS:
 
 
   keyspace	<string>
-    List of Keyspaces to be backed up.
+    Keyspace to be backedup 
 
   sse	<boolean>
     Server side encryption for the backup.
