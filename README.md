@@ -54,7 +54,7 @@ cd yugabyte-k8s-operator
 kubectl create ns operator-test
 kubectl apply -f ./crd/concatenated_crd.yaml
 cd ./chart
-helm install . -n operator-test --debug --timeout 3600s --set rbac.create=true --set kubernetesOperatorNamespace=operator-test --generate-name 
+helm install . -n operator-test --debug --timeout 3600s --set rbac.create=true --set yugaware.kubernetesOperatorNamespace=operator-test --generate-name 
 ```
 
 This command sets up the necessary Role-Based Access Control (RBAC) permissions, 
