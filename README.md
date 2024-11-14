@@ -7,18 +7,18 @@ The YugabyteDB Kubernetes Operator automates the deployment and management of Yu
 Kubernetes. It goes beyond yugabyteDB  current management automation 
 (which relies on REST APIs and GUIs and helm charts).
 
-The operator establishes **ybuniverse** as a custom resource in kuberntes and enables declarative 
-management of yugabytedb universe by updating the CRs
+The operator establishes **ybuniverse** as a custom resource in Kubernetes and enables declarative 
+management of YugabyteDB universe by updating the CRs.
 We support deploying and customizing the ybuniverse resources such as CPU, memomry, disks. 
-Allow the deployment of a multi-AZ balanced yugabytedb universe on the underlying cluster. 
-The CR supports seamless no downtime upgrades of the yugabytedb universe. 
-The operator also supports transparent scale up/scale down/scale out and scale in operations 
+Allow the deployment of a multi-AZ balanced YugabyteDB universe on the underlying cluster. 
+The CR supports seamless no downtime upgrades of the YugabyteDB universe. 
+The operator also supports transparent scale up/scale down/scale out and scale in operations. 
 
 
-As part of this first release, we also relase some additonal CRDs to manage the day2 operations of
-the yugabytedb universe. 
+As part of this first release, we also release some additonal CRDs to manage the day2 operations of
+the YugabyteDB universe. 
 These include:
-  * Release CRD - To run multiple releases of yugabytedb and upgrade the software in a universe.
+  * Release CRD - To run multiple releases of YugabyteDB and upgrade the software in a universe.
   * Support Bundle CRD - To collect logs when universe fails.
   * Backup and Restore CRDs - To take full backup of universe and restore.
   * Storage Config CRD - To configure backup destinations.
@@ -247,7 +247,7 @@ spec:
           memory: 8Gi 
 ```
 
-To add a new software release to use of yugabyteDB
+To add a new software release to use of YugabyteDB
 ```
 apiVersion: operator.yugabyte.io/v1alpha1
 kind: Release
@@ -317,9 +317,9 @@ work correctly.
           failure-domain.beta.kubernetes.io/zone: us-west1-b
           ```
 ### Minikube:
-We know testing an operator can be cumbersome due to resources needed and elvated permissions
+We know testing an operator can be cumbersome due to resources needed and elevated permissions
 required. 
-To get around the resource issue, we verified that the operator and crds work with a minikube
+To get around the resource issue, we verified that the operator and CRDs work with a minikube
 cluster. 
 
 We tested the following workflow.
@@ -492,9 +492,9 @@ FIELDS:
 ```
 
 ## Limitations
-yugabyte-k8s-operator is early alpha version, we recommend using the yugabytedb helm charts for deploying production usecases on kubernetes.
+yugabyte-k8s-operator is early alpha version. We recommend using the YugabyteDB helm charts for deploying production usecases on Kubernetes.
 
-yugabyte-k8s-operator can only be used to deploy universes on the same kubernetes cluster as it is deployed on.
+yugabyte-k8s-operator can only be used to deploy universes on the same Kubernetes cluster as it is deployed on.
 
 xCluster cannot be configured via the K8s operator.   (Note: it can still be used, but not explicitly configured via the K8s operator.  See xCluster docs)
 
@@ -502,7 +502,7 @@ yugabyte-k8s-operator is single cluster only, does not support multicluster univ
 
 yugabyte-k8s-operator does not support software upgrade rollback currently.
 
-Only above listed operations can be performed on the universes via the yugabyte-k8s-operator, for any operations not listed above consult official yugabtyedb documents 
+Only above listed operations can be performed on the universes via the yugabyte-k8s-operator. For any operations not listed above consult official YugabyteDB documents.
 
 ## Support
 
