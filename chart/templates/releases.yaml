@@ -91,3 +91,16 @@ spec:
           helmChart: "https://charts.yugabyte.com/yugabyte-2.21.0.tgz" 
           x86_64: "https://downloads.yugabyte.com/releases/2.21.0.1/yugabyte-2.21.0.1-b1-linux-x86_64.tar.gz"
 ---
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: Release
+metadata:
+  name: "2024.2.0.0-b145"
+spec:
+  config:
+    version: "2024.2.0.0-b145"
+    downloadConfig:
+      http:
+        paths:
+          helmChart: "https://charts.yugabyte.com/yugabyte-2024.2.0.tgz" 
+          x86_64: "https://downloads.yugabyte.com/releases/2024.2.0.0/yugabyte-2024.2.0.0-b145-darwin-x86_64.tar.gz"
+---
