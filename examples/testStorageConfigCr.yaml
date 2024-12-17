@@ -1,0 +1,11 @@
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: StorageConfig
+metadata:
+  name: s3-config-operator 
+spec:
+  config_type: STORAGE_S3
+  data:
+    AWS_ACCESS_KEY_ID: ***""
+    AWS_SECRET_ACCESS_KEY: "***"
+    BACKUP_LOCATION: s3://backups.yugabyte.com/s3Backup 
+

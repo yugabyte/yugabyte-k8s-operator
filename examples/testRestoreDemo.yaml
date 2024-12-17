@@ -1,0 +1,9 @@
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: RestoreJob
+metadata:
+  name: operator-restore-5
+spec:
+  actionType: RESTORE
+  universe: operator-universe-demo 
+  backup: operator-backup-7 
+  keyspace: pg_restore 

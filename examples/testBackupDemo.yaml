@@ -1,0 +1,10 @@
+apiVersion: operator.yugabyte.io/v1alpha1
+kind: Backup
+metadata:
+  name: operator-backup-7
+spec:
+  backupType: PGSQL_TABLE_TYPE
+  storageConfig: s3-config-operator
+  universe: operator-universe-demo 
+  timeBeforeDelete: 1234567890
+  keyspace: postgres 
