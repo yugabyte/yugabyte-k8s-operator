@@ -13,12 +13,6 @@ spec:
   enableYSQLAuth: false                                                                                 
   enableYCQL: true                                                                                      
   enableYCQLAuth: false                                                                                 
-  gFlags:                                                                                             
-    masterGFlags:
-      dns_cache_expiration_ms: "60400"
-    tserverGFlags:
-      dns_cache_expiration_ms: "60800"
-      log_min_seconds_to_retain: "990"
   deviceInfo:                                                                                           
     volumeSize: 100                                                                                     
     numVolumes: 1                                                                                       
