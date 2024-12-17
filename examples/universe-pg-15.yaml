@@ -1,0 +1,43 @@
+apiVersion: operator.yugabyte.io/v1alpha1                                                               
+kind: YBUniverse                                                                                        
+metadata:                                                                                               
+  name: operator-test-pg-15
+spec:                                                                                                                                                                               
+  numNodes:    3                                                                                        
+  replicationFactor:  3                                                                                 
+  enableYSQL: true                                                                                      
+  enableNodeToNodeEncrypt: true                                                                         
+  enableClientToNodeEncrypt: true                                                                       
+  enableLoadBalancer: true 
+  ybSoftwareVersion: "2.25.1.0-b99934293"
+  enableYSQLAuth: false                                                                                 
+  enableYCQL: true                                                                                      
+  enableYCQLAuth: false                                                                                 
+  gFlags:                                                                                             
+    masterGFlags:
+      dns_cache_expiration_ms: "60400"
+    tserverGFlags:
+      dns_cache_expiration_ms: "60800"
+      log_min_seconds_to_retain: "990"
+  deviceInfo:                                                                                           
+    volumeSize: 100                                                                                     
+    numVolumes: 1                                                                                       
+    storageClass: "yb-standard"
+  kubernetesOverrides:    
+    Image:
+      repository: quay.io/yugabyte/yugabyte-dev-builds
+    resource:                                                                                           
+      tserver:                                                                                           
+        requests:                                                                                       
+          cpu: 4                                                                                        
+          memory: 8Gi                                                                                   
+        limits:                                                                                         
+          cpu: 4                                                                                        
+          memory: 8Gi 
+      master:                                                                                           
+        requests:                                                                                       
+          cpu: 4                                                                                        
+          memory: 8Gi                                                                                   
+        limits:                                                                                         
+          cpu: 4                                                                                        
+          memory: 8Gi 
