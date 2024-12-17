@@ -7,17 +7,14 @@ The YugabyteDB Kubernetes Operator automates the deployment and management of Yu
 Kubernetes. It goes beyond yugabyteDB  current management automation 
 (which relies on REST APIs and GUIs and helm charts).
 
-The operator establishes **ybuniverse** as a custom resource in kuberntes and enables declarative 
-management of yugabytedb universe by updating the CRs
-We support deploying and customizing the ybuniverse resources such as CPU, memomry, disks. 
-Allow the deployment of a multi-AZ balanced yugabytedb universe on the underlying cluster. 
-The CR supports seamless no downtime upgrades of the yugabytedb universe. 
-The operator also supports transparent scale up/scale down/scale out and scale in operations 
+The operator establishes ybuniverse as a custom resource in kubernetes and enables declarative management of the yugabytedb universe 
+by updating the CRs. We support deploying and customizing the ybuniverse resources such as CPU, memory, and disks. We allow the deployment 
+of a multi-AZ balanced yugabytedb universe on the underlying cluster. The CR supports seamless no downtime upgrades of the yugabytedb universe. 
+The operator also supports transparent scale up/scale down/scale out and scale in operations
 
 
-As part of this first release, we also relase some additonal CRDs to manage the day2 operations of
-the yugabytedb universe. 
-These include:
+As part of this first release, we included several additional CRDs to manage the day2 operations of the yugabytedb universe. These include:
+
   * Release CRD - To run multiple releases of yugabytedb and upgrade the software in a universe.
   * Support Bundle CRD - To collect logs when universe fails.
   * Backup and Restore CRDs - To take full backup of universe and restore.
@@ -317,8 +314,13 @@ work correctly.
           failure-domain.beta.kubernetes.io/zone: us-west1-b
           ```
 ### Minikube:
-We know testing an operator can be cumbersome due to resources needed and elvated permissions
-required. 
+We know testing an operator can be cumbersome due to resources needed and elevated permissions required. To get around the resource issue, we verified that the operator and crds work with a minikube cluster.
+
+
+
+
+
+
 To get around the resource issue, we verified that the operator and crds work with a minikube
 cluster. 
 
