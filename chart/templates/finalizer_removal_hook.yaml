@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: remove-finalizers
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.yugaware.serviceAccount | default .Release.Name }}
+      restartPolicy: Never
+      containers:
+      - name: remove-finalizers
+        image: bitnami/kubectl:latest
+        command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Removing finalizers from resources..."
+            kubectl get Release -o json --namespace {{ .Release.Namespace }} | jq -r '.items[] | select(.metadata.finalizers != null) | .metadata.name' | \
+            xargs -I {} kubectl patch Release {} --type merge -p '{"metadata":{"finalizers":[]}}' --namespace {{ .Release.Namespace }}
+
