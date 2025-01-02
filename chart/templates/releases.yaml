@@ -102,5 +102,5 @@ spec:
       http:
         paths:
           helmChart: "https://charts.yugabyte.com/yugabyte-2024.2.0.tgz" 
-          x86_64: "https://downloads.yugabyte.com/releases/2024.2.0.0/yugabyte-2024.2.0.0-b145-darwin-x86_64.tar.gz"
+          x86_64: "https://downloads.yugabyte.com/releases/2024.2.0.0/yugabyte-2024.2.0.0-b145-linux-x86_64.tar.gz"
 ---
