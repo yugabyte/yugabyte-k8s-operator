@@ -4,7 +4,7 @@ This guide outlines the steps to perform a backup using the YugabyteDB Kubernete
   * Create a storage configuration.
   * Set up a test database and table.
   * Apply a backup Custom Resource (CR) to back up the data.
-
+  * Apply a restoreJob Custom Resource (CR) to restore the data in a different DB
 ```yaml
 # Create Storage Configuration
 apiVersion: operator.yugabyte.io/v1alpha1
