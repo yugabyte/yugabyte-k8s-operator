@@ -5,6 +5,15 @@ This guide outlines the steps to perform a backup using the YugabyteDB Kubernete
   * Set up a test database and table.
   * Apply a backup Custom Resource (CR) to back up the data.
   * Apply a restoreJob Custom Resource (CR) to restore the data in a different DB
+---
+
+**NOTE**: Please validate that the credentials have valid iam roles and permissions defined. 
+
+The list of required permissions is available [here]( 
+https://docs.yugabyte.com/preview/yugabyte-platform/back-up-restore-universes/configure-backup-storage/#required-s3-iam-permissions
+)
+
+---
 ```yaml
 # Create Storage Configuration
 apiVersion: operator.yugabyte.io/v1alpha1
