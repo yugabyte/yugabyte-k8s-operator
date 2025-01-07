@@ -15,8 +15,8 @@ metadata:
 spec:
   config_type: STORAGE_S3
   data:
-    AWS_ACCESS_KEY_ID: <your-access-key>
-    AWS_SECRET_ACCESS_KEY: <your-secret-key>
+    AWS_ACCESS_KEY_ID: "A*************************T"   
+    AWS_SECRET_ACCESS_KEY: "C3***********************************"   
     BACKUP_LOCATION: s3://backups.yugabyte.com/s3Backup
 
 ```
