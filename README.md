@@ -494,7 +494,6 @@ FIELDS:
 ```
 
 ## Limitations
-yugabyte-k8s-operator is early alpha version, we recommend using the yugabytedb helm charts for deploying production usecases on kubernetes.
 
 yugabyte-k8s-operator can only be used to deploy universes on the same kubernetes cluster as it is deployed on.
 
