@@ -15,7 +15,7 @@ image:
   # including the yugaware image
 
   repository: quay.io/yugabyte/yugabyte-k8s-operator 
-  tag: 0.1.5
+  tag: 0.1.6
   pullPolicy: IfNotPresent
   pullSecret: yugabyte-k8s-pull-secret
   ## Docker config JSON File name
