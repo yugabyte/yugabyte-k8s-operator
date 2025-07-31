@@ -420,25 +420,32 @@ spec:
           ports:
             - containerPort: 9000
               name: yugaware
-          livenessProbe:
-            failureThreshold: 10
+          {{- if .Values.yugaware.pod.probes.enabled }}
+          startupProbe:
+            failureThreshold: {{ div .Values.yugaware.pod.probes.startupTimeSec.max (div .Values.yugaware.pod.probes.startupTimeSec.min 2) }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.startupTimeSec.min }}
+            periodSeconds: {{ div .Values.yugaware.pod.probes.startupTimeSec.min 2 }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.startupTimeSec.min 4 }}
             httpGet:
-              path: /api/app_version
-              port: yugaware
-              scheme: HTTP
-            periodSeconds: 30
-            successThreshold: 1
-            timeoutSeconds: 15
+                path: /api/app_version
+                port: yugaware
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: {{ .Values.yugaware.pod.probes.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.yugaware.pod.probes.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.readinessProbe.periodSeconds 2 }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.readinessProbe.initialDelaySeconds }}
             httpGet:
-              path: /api/app_version
-              port: yugaware
-              scheme: HTTP
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 10
+                path: /api/app_version
+                port: yugaware
+          livenessProbe:
+            failureThreshold: {{ .Values.yugaware.pod.probes.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.yugaware.pod.probes.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.livenessProbe.periodSeconds 2 }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.livenessProbe.initialDelaySeconds }}
+            httpGet:
+                path: /api/app_version
+                port: yugaware
+          {{- end }}
           volumeMounts:
           - name: yugaware-config
             mountPath: /data
