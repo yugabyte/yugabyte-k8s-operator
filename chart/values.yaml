@@ -70,13 +70,13 @@ yugaware:
         min: 20 # minimum expected time for yugaware to start
         max: 600 # maximum expected time for yugaware to start, k8s will restart pod on timeout
       readinessProbe:
-        periodSeconds: 30 # query period
-        failureThreshold: 10 # number of failed checks to restart pod
-        initialDelaySeconds: 120 # wait time before starting readiness checks after container starts
-      livenessProbe:
         periodSeconds: 10 # query period
-        failureThreshold: 3 # number of failed checks to restart pod
+        failureThreshold: 3 # number of failed checks before removing pod from service (stops traffic)
         initialDelaySeconds: 60 # wait time before starting readiness checks after container starts
+      livenessProbe:
+        periodSeconds: 30 # query period
+        failureThreshold: 5 # number of failed checks to restart pod
+        initialDelaySeconds: 120 # wait time before starting liveness checks after container starts
   health:
     username: ""
     password: ""
