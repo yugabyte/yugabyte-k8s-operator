@@ -31,8 +31,6 @@ spec:
     spec:
       terminationGracePeriodSeconds: {{ .Values.yugaware.pod.terminationGracePeriodSeconds }}
       serviceAccountName: {{ .Values.yugaware.serviceAccount | default .Release.Name }}
-      imagePullSecrets:
-      - name: {{ .Values.image.pullSecret }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -420,6 +418,29 @@ spec:
           ports:
             - containerPort: 9000
               name: yugaware
+          {{- if .Values.yugaware.pod.probes.enabled }}
+          startupProbe:
+            failureThreshold: {{ div .Values.yugaware.pod.probes.startupTimeSec.max (div .Values.yugaware.pod.probes.startupTimeSec.min 2) }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.startupTimeSec.min }}
+            periodSeconds: {{ div .Values.yugaware.pod.probes.startupTimeSec.min 2 }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.startupTimeSec.min 4 }}
+            tcpSocket:
+              port: yugaware
+          readinessProbe:
+            failureThreshold: {{ .Values.yugaware.pod.probes.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.yugaware.pod.probes.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.readinessProbe.periodSeconds 2 }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.readinessProbe.initialDelaySeconds }}
+            tcpSocket:
+              port: yugaware
+          livenessProbe:
+            failureThreshold: {{ .Values.yugaware.pod.probes.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.yugaware.pod.probes.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ div .Values.yugaware.pod.probes.livenessProbe.periodSeconds 2 }}
+            initialDelaySeconds: {{ .Values.yugaware.pod.probes.livenessProbe.initialDelaySeconds }}
+            tcpSocket:
+              port: yugaware
+          {{- end }}
           volumeMounts:
           - name: yugaware-config
             mountPath: /data
