@@ -65,7 +65,7 @@ yugaware:
     labels: {}
     terminationGracePeriodSeconds: 30
     probes: # HTTP healthcheck probes configuration
-      enabled: true # add or not readinessProbe, livenessProbe and startupProbe to the container
+      enabled: false # add or not readinessProbe, livenessProbe and startupProbe to the container
       startupTimeSec:
         min: 20 # minimum expected time for yugaware to start
         max: 600 # maximum expected time for yugaware to start, k8s will restart pod on timeout
