@@ -130,6 +130,11 @@ FIELDS:
  enableLoadBalancer  <boolean>
   Enable LoadBalancer access to the universe. Creates a service with
   Type:LoadBalancer in the universe for tserver and masters.
+  ⚠️ WARNING
+  On cloud providers like GKE, this will create a publicly accessible external LoadBalancer by default.
+  To restrict access, ensure you configure:
+   - Annotations for internal load balancers (e.g., `cloud.google.com/load-balancer-type: "Internal"`)
+   - Appropriate firewall rules or network policies
 
  enableNodeToNodeEncrypt    <boolean>
   Enable node to node encryption in the universe. This encrypts the data in
