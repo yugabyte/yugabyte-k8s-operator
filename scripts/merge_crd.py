@@ -46,6 +46,8 @@ def main():
     for f in os.listdir(args.path):
         if f.endswith('.yaml'):
             yaml_files.append(os.path.join(args.path, f))
+            
+    yaml_files.sort()
     
     # Only proceed if there are YAML files to process
     if yaml_files:
